@@ -1,0 +1,70 @@
+<!-- Modal-b -->
+    <div id="act_model_b" class="modal hide" data-backdrop='static' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <h3>批量操作</h3>
+      </div>
+      <div class="modal-body">
+          <div class="control-group">
+              <label class="control-label">确认结果：</label>
+              <div class="controls">
+                <div id="act_btn_div_b" class="btn-group" data-toggle="buttons-radio">
+                  <button id="btn_one_b" type="button" class="btn" data-val="cfmed">确认通过</button>
+                  <button id="btn_two_b" type="button" class="btn" data-val="nopass">不通过</button>
+                </div>
+              </div>
+          </div>
+          
+          <div id="act_text_b" class="control-group hide">
+            <label class="control-label">原因：</label>
+            <div class="controls">
+              <textarea id="act_message_b" rows="3" style="width:400px;"></textarea>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button id="act_cancel_b"class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+        <button id="act_save_b" class="btn btn-primary" data-loading-text="保存中...">保存</button>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+     //批量处理
+     $(function () {
+        var tr;
+        $("#btn_batch").click(function(){
+          tr=$("input[type=checkbox][name=chk_ids]:checked").parents("tr");
+          if(!tr || tr.length==0) return;
+          $("#btn_one_b").button('toggle');
+          $("#act_text_b").hide();
+          $("#act_message_b").val("");
+          $("#act_cancel_b").show();
+          $("#act_save_b").button('reset');
+          $('#act_model_b').modal();
+        })
+        $("#btn_one_b").click(function(){
+          $("#act_text_b").hide();
+        })
+         $("#btn_two_b").click(function(){
+          $("#act_text_b").show();
+        })
+        $("#act_save_b").click(function(){
+            var state=$("#act_btn_div_b .active").data("val");
+            var rt_message=$("#act_message_b").val();
+            var id_list=[];
+            tr.each(function(){
+              id_list.push($(this).data("id"));
+            });
+        
+            $("#act_cancel_b").hide();
+            $("#act_save_b").button('loading');
+            $.post("/item_deal_batch",{id_list:id_list,state:state,rt_message:rt_message},function(ret){
+               if(ret==true){
+                  tr.remove();
+                  $('#act_model_b').modal('hide')
+               }
+            })
+        })
+
+    })
+
+    </script>

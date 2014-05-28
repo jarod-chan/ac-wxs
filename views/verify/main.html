@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <% include ../common/head.html %>
+  </head>
+
+  <body>
+    <% include navbar.html %>
+
+    <% if (acti.id){%>
+      <div class='container'>
+      <h2>活动【<%=acti.name%>】领取码校验</h2>
+
+
+      <div class="input-append">
+        <label class="control-label" >领取码：</label>
+        <input id="rt_code" name="rt_code" type="text">
+        <button id="btn_verify" class="btn btn-primary" type="button">校验并记录领取</button>
+
+      </div>
+      <div>
+        
+        <label class="control-label" >校验结果：</label>
+        <div id="msg_div" class="hide" style="width:300px;">
+                <button id="msg_close" type="button" class="close" >×</button>
+                <h4>Heads up!</h4>
+                <span>This alert needs your attention, but it's not super important.</span>
+        </div>
+      </div>
+
+      </div>
+    
+    <% }else{ %>
+
+      <div class='container'>
+        <h2>当前系统所有活动都已经关闭！</h2>
+      </div>
+    <%}%>
+
+    <% include ../common/script.html %>
+   
+    <script type="text/javascript">
+    $(function(){
+      var map_class={
+        info: 'alert alert-info',
+        warn: 'alert alert-block',
+        error: 'alert alert-error'
+      }
+
+      var map_text={
+        info: '校验成功！',
+        warn: '警告！',
+        error: '校验失败！'
+      }
+      
+      $("#msg_close").click(function(){
+        $("#msg_div").hide();
+      })
+
+      $("#btn_verify").click(function(){
+        $.post("/verify_code?id=<%=acti.id%>",{rt_code:$.trim($("#rt_code").val())},function(rt){
+            var div=$("#msg_div");
+            div.attr("class",map_class[rt.level]);
+            div.find("H4").html(map_text[rt.level]);
+            div.find("span").html(rt.message);
+            div.show();
+        })
+      });
+    })
+    </script>
+
+  </body>
+</html>

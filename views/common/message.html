@@ -1,0 +1,26 @@
+
+
+
+<% if(msg){ %>
+
+<% if(msg.level=="info") {%>
+<div class="alert alert-info">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <h4>警告！</h4>
+  <%=msg.message%>
+</div>
+<% }else if(msg.level=="warn"){ %>
+<div class="alert alert-block">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <h4>警告！</h4>
+  <%=msg.message%>
+</div>
+<% }else if(msg.level=="error"){ %>
+<div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <h4>错误！</h4>
+  <%=msg.message%>
+</div>
+<% } %>
+
+<% } %>

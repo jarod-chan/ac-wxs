@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <% include ../common/head.html %>
+  </head>
+
+  <body>
+    <% include ../common/navbar.html %>
+  
+    <div class='container'>
+    <h2>活动列表</h2>
+    <div class="text-right">
+      <a id="btn_create" class="btn btn-small">新增</a>
+    </div>   
+
+    <table class="table table-bordered table-condensed table-hover">
+           <thead>
+           <tr>
+               <th style="min-width: 80px;">序号</th>
+               <th style="min-width: 80px;">活动名称</th>
+               <th style="min-width: 80px;">状态</th>
+               <th style="min-width: 80px;text-align:center">报名详情</th>
+               <th style="min-width: 20px;text-align:center">操作</th>
+           </tr>
+           </thead>
+           <tbody>
+           <% for(var i=0; i<acti_list.length; i++) { var it=acti_list[i]; %>
+           <tr>
+               <td><%=it.no %></td>
+               <td><%=it.name %></td>
+               <td><%=it.get_state() %></td>
+               <td style="text-align:center">
+                  <a class="btn_item_action btn btn-small btn-info" data-id="<%=it.id%>">报名处理</a>
+                  <a class="btn_item_history btn btn-small btn-inverse" data-id="<%=it.id%>">历史记录</a> 
+               </td>
+               <td style="text-align:center">
+                  <a class="btn_edit btn btn-small btn-primary" data-id="<%=it.id%>">修改</a>
+               </td>
+           </tr>
+           <%}%>
+           </tbody>
+       </table>
+
+    <ul class="pager">
+      <li <%if (isfirst()) {%>  class="disabled" <%}else{%> id="btn_prev" <% }%> ><a href="#" >上页</a></li> 
+      <li class="active"><span><%=page+1%></span></li>
+      <li <%if (islast()) {%> class="disabled" <%}else{%> id="btn_next" <% }%> ><a href="#">下页</a></li>
+    </ul>
+
+    </div>
+
+  
+    <% include ../common/script.html %>
+
+    <script type="text/javascript">
+    $(function () {
+      $("#btn_prev").click(function(){
+        goto("/activity/list?"+$.param({page:<%=page-1%>}))
+      })
+      $("#btn_next").click(function(){
+        goto("/activity/list?"+$.param({page:<%=page+1%>}))
+      })
+    })
+    </script>
+
+    <script type="text/javascript">
+    $(function(){
+        $("#btn_create").click(function(){
+          goto("/activity/create")
+          return false;
+        })
+        $(".btn_edit").click(function(){
+          goto("/activity/edit?"+$.param({id:$(this).data("id")}));
+          return false;
+        })
+        $(".btn_item_action").click(function(){
+          goto("/item_action?"+$.param({id:$(this).data("id")}));
+          return false;
+        })
+        $(".btn_item_history").click(function(){
+          goto("/item_history?"+$.param({id:$(this).data("id")}));
+          return false;
+        })
+
+    })
+    </script>
+
+  </body>
+</html>

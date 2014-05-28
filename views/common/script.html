@@ -1,0 +1,15 @@
+
+<script src="/static/jquery-1.11.1.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/jquery.bootstrap.teninedialog.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#btn_logout").click(function(){ 
+    		$('<form/>',{action:'/logout',method:'post'})
+   			.appendTo($("body"))
+   			.submit();
+	   		return false;
+        })
+    })
+ </script>

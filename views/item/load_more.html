@@ -1,0 +1,61 @@
+    <script src="/static/handlebars.min.js"></script> 
+
+    <script id="tpl-tr" type="text/x-handlebars-template">
+    <tr class="act_tr" data-img="/fileupload/{{img}}" data-id="{{id}}>">
+        <td><input type="checkbox" name="chk_ids"></td>
+        <td>{{wx_id }}</td>
+        <td>{{img}}</td>
+        <td>{{commit_time}}</td>
+        <td>{{state}}</td>
+    </tr>
+    </script>
+
+    <script type="text/javascript">
+    $(function(){
+      var template = Handlebars.compile($("#tpl-tr").html());
+      var data_arr=[<%=id_list%>];
+      var data_arr_len=data_arr.length;
+      var beg_num=0;
+      var load_num=10;
+      
+      function get_next_ids(){
+        if(beg_num>=data_arr_len){
+          return {tag:false};
+        }else if(beg_num+load_num>=data_arr_len){
+          var arr=data_arr.slice(beg_num);
+          beg_num=data_arr_len;
+          return {tag:true,data:arr}
+        }else {
+          var arr=data_arr.slice(beg_num,beg_num+load_num);
+          beg_num=beg_num+load_num;
+          return {tag:true,data:arr}
+        }
+      }
+
+      function load_more_datas(){
+        var next_ids=get_next_ids();
+        if(!next_ids.tag){
+           $.teninedialog({
+              title:'系统信息',
+              content:'没有更多数据了！你可以过一段时间再来查看。'
+          });
+          return;
+        }
+        
+        $.get('/item_list',{id_list:next_ids.data},function(data){
+            if(data.length>0){
+              var tbd=$("#main_tab>tbody");
+              for (var i = 0; i < data.length; i++) {
+                var tr=$(template(data[i]));
+                tr.dblclick(row_dbclick);
+                tbd.append(tr);
+              };
+            }
+        })
+      }
+      
+      load_more_datas();      
+      $("#btn_more").click(load_more_datas)
+
+    })
+    </script>

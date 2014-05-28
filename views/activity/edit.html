@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <% include ../common/head.html %>
+  </head>
+
+  <body>
+    <% include ../common/navbar.html %>
+  
+ <div class="container">
+  <h2>活动编辑</h2>
+
+  <form class="form-horizontal vd-form" action="/activity/edit_save?id=<%=acti.id%>" method="post">
+    <div class="control-group">
+      <label class="control-label" for="key">序号:</label>
+
+      <div class="controls">
+        <span class="uneditable-input" ><%=acti.no %></span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="name">活动名称:</label>
+
+      <div class="controls">
+        <input type="text" id="name" name="name" value="<%=acti.name %>" />
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <label class="control-label" >状态:</label>
+      <div class="controls">
+        <select id="state" name="state" >
+          <% for(var i=0; i<state_list.length; i++) {%>
+          <option value="<%=state_list[i].val%>" <% if(acti.state==state_list[i].val){%>selected="true" <%}%> ><%=state_list[i].name%></option>
+          <%}%>
+        </select>
+        <span class="alert alert-error">
+          <strong>注意!</strong>系统中只能启用唯一活动！
+        </span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+        <a id="btn_save" class="btn btn-small btn-primary">保存</a>
+        <a id="btn_back" class="btn btn-small">返回</a>
+      </div>
+    </div>
+
+  </form>
+ </div>
+
+  
+ <% include ../common/script.html %>
+
+
+  <script type="text/javascript">
+  $(function () {
+      $("#btn_save").click(function(){
+        if($.trim($("#name").val())==''){
+          $.teninedialog({
+              title:'系统信息',
+              content:'活动名称不能为空'
+          });
+          return;
+        }
+        $("form").submit();
+      })
+
+      $("#btn_back").click(function(){
+        goto("/activity/list")
+        return false;
+      })
+  })
+  </script>
+
+  </body>
+</html>

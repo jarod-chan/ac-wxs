@@ -1,0 +1,68 @@
+<!-- Modal -->
+<div id="act_model" class="modal hide" data-backdrop='static' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h3>图片确认</h3>
+  </div>
+  <div id="act_img_div" class="modal-body text-center">
+    <img id="act_img">
+  </div>
+  <div class="modal-body">
+      <div class="control-group">
+          <label class="control-label">确认结果：</label>
+          <div class="controls">
+            <div id="act_btn_div" class="btn-group" data-toggle="buttons-radio">
+              <button id="btn_one" type="button" class="btn" data-val="cfmed">确认通过</button>
+              <button id="btn_two" type="button" class="btn" data-val="nopass">不通过</button>
+            </div>
+          </div>
+      </div>
+      
+      <div id="act_text" class="control-group hide">
+        <label class="control-label">原因：</label>
+        <div class="controls">
+          <textarea id="act_message" rows="3" style="width:400px;"></textarea>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button id="act_cancel"class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+    <button id="act_save" class="btn btn-primary" data-loading-text="保存中...">保存</button>
+  </div>
+</div>
+
+  <script type="text/javascript">
+    //单条处理
+    $(function () {
+        var tr;
+        row_dbclick=function(){
+          tr=$(this);
+          $("#act_img").attr("src",tr.data("img"));
+          $("#btn_one").button('toggle');
+          $("#act_text").hide();
+          $("#act_message").val("");
+          $("#act_cancel").show();
+          $("#act_save").button('reset');
+          $('#act_model').modal();
+        };
+        $("#btn_one").click(function(){
+          $("#act_text").hide();
+        })
+         $("#btn_two").click(function(){
+          $("#act_text").show();
+        })
+        $("#act_save").click(function(){
+            var state=$("#act_btn_div .active").data("val");
+            var rt_message=$("#act_message").val();
+            var id=tr.data("id");
+            $("#act_cancel").hide();
+            $("#act_save").button('loading');
+            $.post("/item_deal?id="+id,{state:state,rt_message:rt_message},function(ret){
+               if(ret==true){
+                  tr.remove();
+                  $('#act_model').modal('hide')
+               }
+            })
+        })
+
+    })
+    </script>

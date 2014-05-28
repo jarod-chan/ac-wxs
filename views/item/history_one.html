@@ -1,0 +1,22 @@
+<!-- Modal -->
+<div id="act_model" class="modal hide"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>图片</h3>
+  </div>
+  <div id="act_img_div" class="modal-body text-center">
+    <img id="act_img">
+  </div>
+
+</div>
+
+  <script type="text/javascript">
+    //单条处理
+    $(function () {
+        $("#main_tab tbody tr").dblclick(function(){
+          tr=$(this);
+          $("#act_img").attr("src",tr.data("img"));
+          $('#act_model').modal();
+        });
+    })
+    </script>

@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <% include ../common/head.html %>
+  </head>
+
+  <body>
+    <% include ../common/navbar.html %>
+
+    <div class='container'>
+    <h2>活动【<%=acti.name%>】报名处理</h2>
+
+    <div class="text-right">
+      <a id="btn_batch" class="btn btn-small btn-primary">批量操作</a>&nbsp;&nbsp;<a id="btn_back" class="btn btn-small">返回</a>
+    </div>
+    
+    <table id="main_tab" class="table table-bordered table-condensed table-hover">
+           <thead>
+           <tr>
+               <th style="min-width: 20px;"><input type="checkbox" id="check_all"></th>
+               <th style="min-width: 80px;">微信id</th>
+               <th style="min-width: 80px;">图片</th>
+               <th style="min-width: 80px;">提交时间</th>
+               <th style="min-width: 80px;">状态</th>
+           </tr>
+           </thead>
+           <tbody>
+           </tbody>
+    </table>
+
+    <div class="text-right">
+      <a id="btn_more" class="btn btn-small btn-info">加载更多</a>
+    </div>
+
+    </div>
+
+    
+
+    <% include ../common/script.html %>
+   
+
+    <% include load_more.html %>
+    <% include mod_one.html %>
+    <% include mod_batch.html %>
+
+    <script type="text/javascript">
+    var row_dbclick;
+
+
+    $(function(){
+      $("#btn_back").click(function(){
+        goto("/activity/list")
+        return false;
+      });
+      $("#check_all").click(function(){
+        var chk=$(this).is(":checked");
+        console.log(chk);
+        $("input[type=checkbox][name=chk_ids]").prop('checked', chk);
+      })
+    })
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <% include ../common/head.html %>
+  </head>
+
+  <body>
+    <% include ../common/navbar.html %>
+
+    <div class='container'>
+    <h2>活动【<%=acti.name%>】历史记录</h2>
+
+    <select id="state_sel">
+      <option value="all"  <% if(page.state=="all"){%>selected="true" <%}%> >所有</option>
+     <% for(var i=0; i<state_list.length; i++) {%>
+     <option value="<%=state_list[i].val%>" <% if(page.state==state_list[i].val){%>selected="true" <%}%> ><%=state_list[i].name%></option>
+     <%}%>
+    </select>
+    <%if(page.total>0){%>
+    <p class="text-info">共有<%=page.total%>条数据！</p>
+    <%}else{%>
+    <p class="text-warning">没有数据！</p>
+    <%}%>
+
+    <div class="text-right">
+      <a id="btn_back" class="btn btn-small">返回</a>
+    </div>
+    
+    <table id="main_tab" class="table table-bordered table-condensed table-hover">
+           <thead>
+           <tr>
+               <th style="min-width: 20px;">#</th>
+               <th style="min-width: 80px;">微信id</th>
+               <th style="min-width: 80px;">图片</th>
+               <th style="min-width: 80px;">提交时间</th>
+               <th style="min-width: 80px;">状态</th>
+           </tr>
+           </thead>
+           <tbody>
+              <% for(var i=0; i<page.data.length; i++) { var it=page.data[i]; %>
+               <tr data-img="/fileupload/<%=it.img%>">
+                   <td><%=i+1 %></td>
+                   <td><%=it.wx_id %></td>
+                   <td><%=(it.img?it.img:"") %></td>
+                   <td><%=it.get_commit_time() %></td>
+                   <td><%=it.get_state() %></td>
+               </tr>
+               <%}%>
+           </tbody>
+    </table>
+
+    <ul class="pager">
+      <li <%if (page.isfirst()) {%>  class="disabled" <%}else{%> id="btn_prev" <% }%> ><a href="#" >上页</a></li> 
+      <li class="active"><span><%=page.page+1%></span></li>
+      <li <%if (page.islast()) {%> class="disabled" <%}else{%> id="btn_next" <% }%> ><a href="#">下页</a></li>
+    </ul>
+
+
+ </div>
+
+    
+
+    <% include ../common/script.html %>
+
+    <% include /history_one.html %>
+   
+
+    <script type="text/javascript">
+
+    $(function(){
+      $("#btn_back").click(function(){
+        goto("/activity/list")
+        return false;
+      });
+      $("#btn_prev").click(function(){
+        goto("/item_history?"+$.param({id:<%=acti.id%>,state:'<%=page.state%>',page:<%=page.page-1%>}))
+      })
+      $("#btn_next").click(function(){
+        goto("/item_history?"+$.param({id:<%=acti.id%>,state:'<%=page.state%>',page:<%=page.page+1%>}))
+      })
+      $("#state_sel").change(function(){
+        var val=$(this).find("option:selected").val();
+        goto("/item_history?"+$.param({id:<%=acti.id%>,state:val,page:0}))
+      });
+    })
+    </script>
+
+  </body>
+</html>
